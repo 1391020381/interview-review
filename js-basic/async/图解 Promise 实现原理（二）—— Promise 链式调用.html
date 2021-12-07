@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图解 Promise 实现原理（二）—— Promise 链式调用</title>
+</head>
+
+<body>
+    <script>
+        //极简的实现 + 链式调用 + 延迟机制 + 状态
+        class easyPromise {
+            callbacks = [];
+            state = 'pending';
+            value = null;
+            constructor(fn) {
+                fn(this._resolve.bind(this))
+            }
+            then(onFulfilled) {
+                if (this.state == 'pending') {
+                    this.callbacks.push(onFulfilled)
+                } else {
+                    onFulfilled(this.value)
+                }
+                return this;
+            }
+            _resolve(value) {
+                this.state = 'fulfilled';
+                this.value = value;
+                this.callbacks.forEach(fn => fn(value))
+            }
+        }
+    </script>
+
+    // 完整的实现
+    <script>
+        var promsieCount = 1;
+        class Promise {
+            name = ''
+            callbacks = [];
+            state = 'pending';
+            value = null;
+            constructor(fn) {
+                this.name = 'Promise-' + promsieCount++;
+                console.log('[%s]:constructor', this.name);
+                fn(this._resolve.bind(this))
+            }
+            then(onFulfilled) {
+                console.log('[%s]:then', this.name);
+                return new Promise((resolve => {
+                    this._handle({
+                        onFulfilled: onFulfilled || null,
+                        resolve, resolve
+                    })
+                }))
+            }
+            _handle(callback) {
+                console.log('[%s]:_handle', this.name, 'state=', this.state);
+                if (this.state === 'pending') {
+                    this.callbacks.push(callback)
+                    console.log('[%s]:_handle', this.name, 'callbacks=', this.callbacks);
+                    return
+                }
+                // then中没有传入任何东西
+                if (!callback.onFulfilled) {
+                    callback.resolve(this.value)
+                    return;
+                }
+                var ret = callback.onFulfilled(this.value)
+                callback.resolve(ret)
+            }
+            _resolve(value) {
+                console.log('[%s]:_resolve', this.name);
+                console.log('[%s]:_resolve', this.name, 'value=', value);
+                this.state = 'fulfilled';
+                this.value = value;
+                this.callbacks.forEach(callback => this._handle(callback))
+            }
+        }
+    </script>
+
+    <script>
+        var mockAjax = (url, s, callback) => {
+            setTimeout(() => {
+                callback(url + '异步请求耗时' + s + '秒')
+            }, 1000 * s)
+        }
+
+        new Promise(resolve => {
+            mockAjax('getUserId', 1, function (result) {
+                resolve(result);
+            })
+        }).then(result => {
+            console.log(result);
+        })
+    </script>
+</body>
+
+</html>
