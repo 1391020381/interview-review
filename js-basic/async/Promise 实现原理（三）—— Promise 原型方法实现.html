@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Promise 实现原理（三）—— Promise 原型方法实现</title>
+</head>
+
+<body>
+    <script>
+        class Promise {
+            callbacks = [];
+            state = 'pending';
+            value = null
+            constructor(fn) {
+                fn(this._resolve.bind(this))
+            }
+            then() {
+                return new Promsie(resolve => {
+                    this._handle({
+                        onFulfilled: onFulfilled || null,
+                        resolve: resolve
+                    })
+                })
+            }
+            _handle(callback) {
+                if (this.state === 'pending') {
+                    this.callbacks.push(callback)
+                    return
+                }
+                // 如果then 中没有传递任何东西
+                if (!callback.onFulfilled) {
+                    callback.resolve(this.value)
+                    return
+                }
+                var ret = callback.onFulfilled(this.value)
+                callback.resolve(ret)
+            }
+            _resolve(value) {
+                if (value && typeof value === 'object' || typeof value === 'function') {
+                    var then = value.then
+                    if (typeof then === 'function') {
+                        then.call(value, this._resolve.bind(this))
+                        return
+                    }
+                }
+                this.state = 'fulfilled';
+                this.value = value;
+                this.callbacks.forEach(callback => this._handle(callback => this._handle(callback)))
+            }
+        }
+    </script>
+
+</body>
+
+</html>

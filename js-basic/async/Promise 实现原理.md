@@ -22,4 +22,4 @@
 9. Promsie-1的状态变成fulfilled
 10. Promise-1的 onFulfilled被执行,打印出了 'getUserId异步请求耗时1s'
 11. 然后再调用Promsie-2.resolve
-12. 改变Promise-2的值和状态,因为Promise-1的onFfulfilled没有返回值,所以Promise-2的值为undefined
+12. 改变Promise-2的值和状态,因为Promise-1的onFfulfilled没有返回值,所以Promise-2的值为undefined。
