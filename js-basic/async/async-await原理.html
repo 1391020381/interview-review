@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>async-await原理</title>
+</head>
+
+<body>
+    <p>async-await实际上就是对 Generator生成器的封装</p>
+    <p>Generator可以通过yield关键字,把函数的执行流程挂起,通过next()方法可以切换到下一个状态</p>
+    <p>run方法里面 step方法，每次Promise..then()的时候都执行step(),实现自动迭代的效果。在迭代的过程中,我们还把resolve的值传入gen.resolve
+        使得yield得以返回Promise的resolve值</p>
+    <script>
+        function run1(gen) {
+            var g = gen(); // 获取迭代器
+            function step(val) { // 封装一个方法 递归执行 next()
+                var res = g.next(val) // 获取迭代对象,并返回resolve的值
+                if (res.done) return res.value  // 递归终止条件
+                res.value.then(val => {
+                    console.log(val)
+                    step(val)
+                })
+            }
+            step()
+        }
+        function* myGenerator() {
+            yield Promise.resolve(1)
+            yield Promise.resolve(2)
+            yield Promise.resolve(3)
+        }
+        run1(myGenerator)
+    </script>
+
+    <script>
+        function run(gen) {
+            // 把返回值包装成Promise
+            return new Promise((resolve, reject) => {
+                var g = gen();
+                function step(val) {
+                    // 错误处理
+                    try {
+                        var res = g.next(val)
+                    } catch (err) {
+                        return reject(err)
+                    }
+                    if (res.done) {
+                        return resolve(res.value)
+                    }
+                    // res.value包装为promise 已兼容yield后面跟基本类型的情况
+                    Promise.resolve(res.value).then(val => {
+                        step(val)
+                    },
+                        err => {
+                            g.throw(err)
+                        }
+                    )
+                }
+                step()
+            })
+        }
+    </script>
+</body>
+
+</html>
