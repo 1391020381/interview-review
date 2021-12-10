@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图片加载</title>
+    <style>
+        * {
+            border: none !important;
+        }
+    </style>
+</head>
+
+<body>
+    <script>
+        function loadImage(file, resolve, reject) {
+            const image = new Image();
+            image.src = file;
+            image.onload = () => {
+                resolve(image);
+            };
+            image.onerror = () => {
+                reject(new Error("load fail"));
+            };
+            document.body.appendChild(image);
+        }
+
+        loadImage(
+            "https://t7.baidu.com/it/u=508006830,4042443322&fm=193&f=GIF",
+            image => {
+                image.style.border = "solid 5px red";
+            },
+            error => {
+                console.log(error);
+            }
+        );
+    </script>
+</body>
+
+</html>

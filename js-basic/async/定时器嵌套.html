@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>定时器嵌套</title>
+    <style>
+        div {
+            width: 100px;
+            height: 100px;
+            background: yellowgreen;
+            position: absolute;
+        }
+    </style>
+</head>
+
+<body>
+    <div></div>
+    <script>
+        function interval(callback, delay = 100) {
+            let id = setInterval(() => callback(id), delay);
+        }
+
+        const div = document.querySelector("div");
+        interval(timeId => {
+            const left = parseInt(window.getComputedStyle(div).left);
+            div.style.left = left + 10 + "px";
+            if (left > 200) {
+                clearInterval(timeId);
+                interval(timeId => {
+                    const width = parseInt(window.getComputedStyle(div).width);
+                    div.style.width = width - 1 + "px";
+                    if (width <= 0) clearInterval(timeId);
+                }, 10);
+            }
+        }, 100);
+    </script>
+</body>
+
+</html>
