@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>动手实现一个简单的浏览器端js模块加载器</title>
+</head>
+<p>实现一个简单的js加载器并不复杂,主要可以分为 解析路径 下载模块 解析模块依赖 解析模块</p>
+<p>一个js文件即表示一个模块,那么我们可以在模块文件中,构造一个闭包,并传入一个对象,作为模块的导出</p>
+<p>
+    define(factory(){
+    var x = {
+    a:1
+    }
+    return x;
+    })
+</p>
+<p>define函数接受一个工厂函数参数,浏览器执行该脚本时,define函数执行factory,并把它的return值存储在加载器的模块对象modules里</p>
+<p>如何标识一个模块呢,可以用文件的uri,它是唯一标识,是天然的id</p>
+<p>绝对路径 相对路径 虚拟绝对路径 需要一个resolvePath函数来将不同形式的path解析成uri</p>
+<p>创建一个eventProxy，订阅加载a与加载b事件；define函数执行到最后，已经把导出挂载modules里之后，emit一个本模块加载完成的事件，eventProxy收到后检查a与b是否都加载完成，如果完成，就传参给f执行回调。/p>
+
+<p>
+    define函数的第一个参数可以传入一个依赖数组,表示a模块依赖c与d。 define执行时,告诉eventProxy订阅c与d加载事件,加载好了就执行回调函数f存储a的导出,并emit事件a已加载。
+</p>
+<p>浏览器端加载脚本的原始方法是插入一个script标签,指定src之后,浏览器开始下载该脚本</p>
+<p>模块下载完成后,如何在解析它时知道它的uri? srcitp.onload获取this对象的src属性；一种是在define函数中采用 document.currentScript.src</p>
+
+<body>
+    <script>
+
+        var zmm = {
+            _modules: {},
+            _configs: {
+                // 用于拼接相对路径
+                basePath: (function (path) {
+                    if (path.charAt(path.length - 1) === '/') {
+                        path = path.substr(0, path.length - 1);
+                    }
+                    return path.substr(path.indexOf(location.host) + location.host.length + 1);
+                })(location.href),
+                // 用于拼接相对根路径
+                host: location.protocol + '//' + location.host + '/'
+            }
+        };
+
+        zmm.hasModule = function (_uri) {
+            // 判断是否已有该模块，不论加载中或已加载好
+            return this._modules.hasOwnProperty(_uri);
+        };
+        zmm.isModuleLoaded = function (_uri) {
+            // 判断该模块是否已加载好
+            return !!this._modules[_uri];
+        };
+        zmm.pushModule = function (_uri) {
+            // 新模块占坑，但此时还未加载完成，表示加载中；防止重复加载
+            if (!this._modules.hasOwnProperty(_uri)) {
+                this._modules[_uri] = null;
+            }
+        };
+        zmm.installModule = function (_uri, mod) {
+            this._modules[_uri] = mod;
+        };
+        zmm.load = function (uris) {
+            var i, nsc;
+            for (i = 0; i < uris.length; i++) {
+                if (!this.hasModule(uris[i])) {
+                    this.pushModule(uris[i]);
+                    // 开始加载
+                    var nsc = document.createElement('script');
+                    nsc.src = uris[i];
+                    document.body.appendChild(nsc);
+                }
+            }
+        };
+
+        zmm.resolvePath = function (path) {
+            // 返回绝对路径
+            var res = '', paths = [], resPaths;
+            if (path.match(/.*:\/\/.*/)) {
+                // 绝对路径
+                res = path.match(/.*:\/\/.*?\//)[0]; // 协议+域名
+                path = path.substr(res.length);
+            } else if (path.charAt(0) === '/') {
+                // 相对根路径 /开头
+                res = this._configs.host;
+                path = path.substr(1);
+            } else {
+                // 相对路径 ./或../开头或直接文件名
+                res = this._configs.host;
+                resPaths = this._configs.basePath.split('/');
+            }
+            resPaths = resPaths || [];
+            paths = path.split('/');
+            for (var i = 0; i < paths.length; i++) {
+                if (paths[i] === '..') {
+                    resPaths.pop();
+                } else if (paths[i] === '.') {
+                    // do nothing
+                } else {
+                    resPaths.push(paths[i]);
+                }
+            }
+            res += resPaths.join('/');
+            return res;
+        };
+
+        var define = zmm.define = function (dependPaths, fac) {
+            var _uri = document.currentScript.src;
+            if (zmm.isModuleLoaded(_uri)) {
+                return;
+            }
+            var factory, depPaths, uris = [];
+            if (arguments.length === 1) {
+                factory = arguments[0];
+                // 挂载到模块组中
+                zmm.installModule(_uri, factory());
+                // 告诉proxy该模块已装载好
+                zmm.proxy.emit(_uri);
+            } else {
+                // 有依赖的情况
+                factory = arguments[1];
+                // 装载完成的回调函数
+                zmm.use(arguments[0], function () {
+                    zmm.installModule(_uri, factory.apply(null, arguments));
+                    zmm.proxy.emit(_uri);
+                });
+            }
+        };
+
+        zmm.use = function (paths, callback) {
+            if (!Array.isArray(paths)) {
+                paths = [paths];
+            }
+            var uris = [], i;
+            for (i = 0; i < paths.length; i++) {
+                uris.push(this.resolvePath(paths[i]));
+            }
+            // 先注册事件，再加载
+            this.proxy.watch(uris, callback);
+            this.load(uris);
+        };
+
+        zmm.proxy = function () {
+            var proxy = {};
+            var taskId = 0;
+            var taskList = {};
+
+            var execute = function (task) {
+                var uris = task.uris,
+                    callback = task.callback;
+                for (var i = 0, arr = []; i < uris.length; i++) {
+                    arr.push(zmm._modules[uris[i]]);
+                }
+                callback.apply(null, arr);
+            };
+            var deal_loaded = function (_uri) {
+                var i, k, task, sum;
+                // 当一个模块加载完成时，遍历当前任务栈
+                for (k in taskList) {
+                    if (!taskList.hasOwnProperty(k)) {
+                        continue;
+                    }
+                    task = taskList[k];
+                    if (task.uris.indexOf(_uri) > -1) {
+                        // 查看这个任务中的模块是否都已加载好
+                        for (i = 0, sum = 0; i < task.uris.length; i++) {
+                            if (zmm.isModuleLoaded(task.uris[i])) {
+                                sum++;
+                            }
+                        }
+                        if (sum === task.uris.length) {
+                            // 都加载完成 删除任务
+                            delete (taskList[k]);
+                            execute(task);
+                        }
+                    }
+                }
+            };
+
+            proxy.watch = function (uris, callback) {
+                // 先检查一遍是否都加载好了
+                for (var i = 0, sum = 0; i < uris.length; i++) {
+                    if (zmm.isModuleLoaded(uris[i])) {
+                        sum++;
+                    }
+                }
+                if (sum === uris.length) {
+                    execute({
+                        uris: uris,
+                        callback: callback
+                    });
+                } else {
+                    // 订阅新加载任务
+                    var task = {
+                        uris: uris,
+                        callback: callback
+                    };
+                    // 添加任务
+                    taskList['' + taskId] = task;
+                    taskId++;
+                }
+            };
+            proxy.emit = function (_uri) {
+                console.log(_uri + ' is loaded!');
+                deal_loaded(_uri);
+            };
+            return proxy;
+        }();
+    </script>
+    <script>
+        zmm.use('./js/a', function (a) {
+            console.log(a);  // 1
+        });
+    </script>
+</body>
+
+</html>
