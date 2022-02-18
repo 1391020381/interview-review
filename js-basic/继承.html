@@ -9,7 +9,104 @@
 </head>
 
 <body>
+    <script>
+        // 原型链继承
+        // 构造函数继承(借助call)
+        // 组合继承(前两种组合)
+        // 原型式继承 Object.create()
+        // 寄生式继承 使用原型式继承 然后再进行增强 添加一些方法
+        // 寄生组合式继承  Parent Child 组合继承 但是 原型Child prototype 通过Object.create实现
 
+        function clone(parent, child) {
+            // Ojbect.create 可以减少组合继承中多进行一次构造的过程
+            child.prototype = Object.create(parent.prototype)
+            child.prototype.constructor = child
+        }
+        function Parent6() {
+            this.name = 'parent6';
+            this.play = [1, 2, 3]
+        }
+        Parent6.prototype.getName = function () {
+            return this.name;
+        }
+        function Child6() {
+            Parent6.call(this)
+            this.friends = 'child5'
+        }
+        clone(Parent6, Child6);
+        Child6.prototype.getFriends = function () {
+            return this.friends
+        }
+    </script>
+
+    <script>
+        // extend
+
+        function _possibleConstructorReturn(self, call) {
+
+            // ...
+
+            return call && (typeof call === 'object' || typeof call === 'function') ? call : self;
+
+        }
+
+        function _inherits(subClass, superClass) {
+
+            // 这里可以看到
+
+            subClass.prototype = Object.create(superClass && superClass.prototype, {
+
+                constructor: {
+
+                    value: subClass,
+
+                    enumerable: false,
+
+                    writable: true,
+
+                    configurable: true
+
+                }
+
+            });
+
+            if (superClass) {
+                if (Object.setPrototypeOf) {
+                    Object.setPrototypeOf(subClass, superClass)
+                } else {
+                    subClass.__proto__ = superClass
+                }
+            }
+
+        }
+
+
+
+        var Parent = function Parent() {
+
+            // 验证是否是 Parent 构造出来的 this
+
+            _classCallCheck(this, Parent);
+
+        };
+
+        var Child = (function (_Parent) {
+
+            _inherits(Child, _Parent);
+
+            function Child() {
+
+                _classCallCheck(this, Child);
+
+                return _possibleConstructorReturn(this, (Child.__proto__ || Object.getPrototypeOf(Child)).apply(this, arguments));
+
+            }
+
+            return Child;
+
+        }(Parent));
+
+    </script>
 </body>
 
 </html>
