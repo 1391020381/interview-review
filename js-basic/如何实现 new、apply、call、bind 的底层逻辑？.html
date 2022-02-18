@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>如何实现 new、apply、call、bind 的底层逻辑？</title>
+</head>
+
+<body>
+    <script>
+        // new  
+        function objectFactory() {
+            var obj = new Object();
+            var Constructor = new Object();
+            obj.__proto__ = Constructor.prototype
+            var ret = Constructor.apply(obj, arguments)
+            return typeof ret === 'object' ? ret : obj
+        }
+    </script>
+</body>
+
+</html>
