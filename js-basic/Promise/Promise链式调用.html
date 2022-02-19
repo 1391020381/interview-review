@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Promise链式调用</title>
+</head>
+
+<body>
+    <script>
+        // class Promise {
+        //     classbacks = [];
+        //     value = null;
+        //     state = 'pending'
+        //     constructor(fn) {
+        //         fn(this._resolve.bind(this))
+        //     }
+        //     then(onFulfilled) {
+        //         if (this.state === 'pending') {
+        //             this.classbacks.push(onFulfilled)
+        //         } else {
+        //             onFulfilled(this.value)
+        //         }
+        //         return this
+        //     }
+        //     _resolve(value) {
+        //         this.state = 'fulfiled'
+        //         this.value = value
+        //         this.classbacks.forEach(callback => {
+        //             callback(value)
+        //         })
+        //     }
+        // }
+        // 真正的链式Promise是指当前Promise达到fulfilled状态后,即开始进行下一个Promise(后邻Promise)
+        // 理解Promise的难点
+        class Promise {
+            callbacks = [];
+            state = 'pending';
+            value = null;
+            constructor(fn) {
+                fn(this._resolve.bind(this))
+            }
+            then(onFulfilled) {
+                return new Promise(resolve => {
+                    this._handle({
+                        onFulfilled: onFulfilled || null,
+                        resolve: resolve
+                    })
+                })
+            }
+            _handle(callback) {
+                if (this.state === 'pending') {
+                    this.callbacks.push(callback)
+                    return
+                }
+                if (!callback.onFulfilled) {
+                    callback.resolve(this.value)
+                    return;
+                }
+                var ret = callback.onFulfilled(this.value)
+                callback.resolve(ret)
+            }
+            _resolve(value) {
+                if (value && (typeof value === 'object' || typeof value === 'function')) {
+                    var then = value.then
+                    if (typeof then === 'function') {
+                        then.call(value, this._resolve.bind(this))
+                        return;
+                    }
+                }
+                this.state = 'fulfilled';
+                this.value = value;
+                this.callbacks.forEach(callback => this._handle(callback))
+            }
+        }
+        // 当第一个Promise成功时,resolve方法将其状态置为fulfilled 并保存resolve带过来的value
+        // 然后取出callbacks中的对象,执行当前Promise的onFulfilled,返回值通过调用第二个Promise的resolve方法,传递给第二个Promsie。
+    </script>
+</body>
+
+</html>
