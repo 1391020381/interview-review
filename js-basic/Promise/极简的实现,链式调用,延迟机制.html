@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>极简的实现+链式调用+延迟机制</title>
+</head>
+
+<body>
+    <script>
+        // 极简的实现+链式调用+延迟机制
+        // class Promise {
+        //     callbacks = []
+        //     constructor(fn) {
+        //         fn(this._resolve.call(this))
+        //     }
+        //     // 添加回调函数
+        //     then(fn) {
+        //         this.callbacks.push(fn)
+        //         return this
+        //     }
+        //     // 异步执行成功回调
+        //     _resolve(value) {
+        //         setTimeout(() => {
+        //             this.callbacks.forEach(callback => {
+        //                 callback(value)
+        //             })
+        //         })
+        //     }
+        // }
+        // 极简的实现 + 链式调用  + 延迟机制 + 状态
+        class Promise {
+            callbacks = []
+            state = 'pending'
+            value = null;
+            constructor(fn) {
+                fn(this._resolve.bind(this))
+            }
+            then(onFulfilled) {
+                if (this.state === 'pending') {
+                    this.callbacks.push(onFulfilled)
+                } else {
+                    onFulfilled(this.value)
+                }
+                return this;
+            }
+            _resolve(value) {
+                this.state = 'fulfilled'
+                this.value = value;
+                this.callbacks.forEach(fn => fn(value))
+            }
+        }
+    </script>
+</body>
+
+</html>
