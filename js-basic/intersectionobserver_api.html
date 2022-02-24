@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>intersectionobserver</title>
+</head>
+
+<body>
+    <script>
+        // IntersectionObserver是浏览器原生提供的构造函数,接受两个参数:callback是可见性变化时的回调数, options是配置对象
+        var io = new IntersectionObserver(entries => {
+            // callback一般会触发两次。 一次是目标元素刚刚进入视口
+            // 一次是完全离开视口
+            console.log(entries)
+        })
+        // 开始观察  如果要观察多个节点,就要多次调用这个方法 io.observe(elementA) io.observe(elementB)
+        io.observe(document.getElementById(''))
+
+        // 停止观察
+        io.unobserve(element)
+        // 关闭观察器
+        io.disconnect()
+
+    </script>
+</body>
+
+</html>
