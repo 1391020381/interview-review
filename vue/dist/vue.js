@@ -2,22 +2,42 @@
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
   (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.Vue = factory());
-}(this, (function () { 'use strict';
+})(this, (function () { 'use strict';
+
+  function ownKeys(object, enumerableOnly) {
+    var keys = Object.keys(object);
+
+    if (Object.getOwnPropertySymbols) {
+      var symbols = Object.getOwnPropertySymbols(object);
+      enumerableOnly && (symbols = symbols.filter(function (sym) {
+        return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+      })), keys.push.apply(keys, symbols);
+    }
+
+    return keys;
+  }
+
+  function _objectSpread2(target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = null != arguments[i] ? arguments[i] : {};
+      i % 2 ? ownKeys(Object(source), !0).forEach(function (key) {
+        _defineProperty(target, key, source[key]);
+      }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) {
+        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+      });
+    }
+
+    return target;
+  }
 
   function _typeof(obj) {
     "@babel/helpers - typeof";
 
-    if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-      _typeof = function (obj) {
-        return typeof obj;
-      };
-    } else {
-      _typeof = function (obj) {
-        return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-      };
-    }
-
-    return _typeof(obj);
+    return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {
+      return typeof obj;
+    } : function (obj) {
+      return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+    }, _typeof(obj);
   }
 
   function _classCallCheck(instance, Constructor) {
@@ -39,6 +59,9 @@
   function _createClass(Constructor, protoProps, staticProps) {
     if (protoProps) _defineProperties(Constructor.prototype, protoProps);
     if (staticProps) _defineProperties(Constructor, staticProps);
+    Object.defineProperty(Constructor, "prototype", {
+      writable: false
+    });
     return Constructor;
   }
 
@@ -57,40 +80,6 @@
     return obj;
   }
 
-  function ownKeys(object, enumerableOnly) {
-    var keys = Object.keys(object);
-
-    if (Object.getOwnPropertySymbols) {
-      var symbols = Object.getOwnPropertySymbols(object);
-      if (enumerableOnly) symbols = symbols.filter(function (sym) {
-        return Object.getOwnPropertyDescriptor(object, sym).enumerable;
-      });
-      keys.push.apply(keys, symbols);
-    }
-
-    return keys;
-  }
-
-  function _objectSpread2(target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i] != null ? arguments[i] : {};
-
-      if (i % 2) {
-        ownKeys(Object(source), true).forEach(function (key) {
-          _defineProperty(target, key, source[key]);
-        });
-      } else if (Object.getOwnPropertyDescriptors) {
-        Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
-      } else {
-        ownKeys(Object(source)).forEach(function (key) {
-          Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
-        });
-      }
-    }
-
-    return target;
-  }
-
   function _slicedToArray(arr, i) {
     return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest();
   }
@@ -100,14 +89,17 @@
   }
 
   function _iterableToArrayLimit(arr, i) {
-    if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return;
+    var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];
+
+    if (_i == null) return;
     var _arr = [];
     var _n = true;
     var _d = false;
-    var _e = undefined;
+
+    var _s, _e;
 
     try {
-      for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+      for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {
         _arr.push(_s.value);
 
         if (i && _arr.length === i) break;
@@ -1044,7 +1036,8 @@
     // 我们需要把html字符串变成render函数
     // 1.把html代码转成ast语法树  ast用来描述代码本身形成树结构 不仅可以描述html 也能描述css以及js语法
     // 很多库都运用到了ast 比如 webpack babel eslint等等
-    var ast = parse(template); // 2.优化静态节点
+    var ast = parse(template);
+    console.log('compileToFunctions-ast:', ast); // 2.优化静态节点
     // 这个有兴趣的可以去看源码  不影响核心功能就不实现了
     //   if (options.optimize !== false) {
     //     optimize(ast, options);
@@ -1054,7 +1047,8 @@
     // 类似_c('div',{id:"app"},_c('div',undefined,_v("hello"+_s(name)),_c('span',undefined,_v("world"))))
     // _c代表创建元素 _v代表创建文本 _s代表文Json.stringify--把对象解析成文本
 
-    var code = generate(ast); //   使用with语法改变作用域为this  之后调用render函数可以使用call改变this 方便code里面的变量取值
+    var code = generate(ast);
+    console.log('compileToFunctions-ast', ast); //   使用with语法改变作用域为this  之后调用render函数可以使用call改变this 方便code里面的变量取值
 
     var renderFn = new Function("with(this){return ".concat(code, "}"));
     return renderFn;
@@ -1312,6 +1306,8 @@
   }
 
   function mountComponent(vm, el) {
+    // vm._render通过解析render方法 渲染出虚拟节点dom
+    // vm._update通过虚拟节点dom 创建真实的dom节点
     // 上一步模板编译解析生成了render函数
     // 下一步就是执行vm._render()方法 调用生成的render函数 生成虚拟dom
     // 最后使用vm._update()方法把虚拟dom渲染到页面
@@ -1322,6 +1318,8 @@
     callHook(vm, "beforeMount");
 
     var updateComponent = function updateComponent() {
+      console.log('vnode:', vm._render());
+
       vm._update(vm._render());
     };
 
@@ -1393,6 +1391,7 @@
         if (template) {
           var render = compileToFunctions(template);
           options.render = render;
+          console.log('compileTemplateToFunctions-render:', render);
         }
       } // 将当前组件实例挂载到真实的el节点上面
 
@@ -1401,7 +1400,7 @@
     };
   }
 
-  var Vnode = function Vnode(tag, data, key, children, text, componentOptions) {
+  var Vnode = /*#__PURE__*/_createClass(function Vnode(tag, data, key, children, text, componentOptions) {
     _classCallCheck(this, Vnode);
 
     console.log("🚀 ~ file: index.js ~ line 5 ~ Vnode ~ constructor ~ componentOptions", componentOptions);
@@ -1411,7 +1410,7 @@
     this.children = children;
     this.text = text;
     this.componentOptions = componentOptions;
-  }; // 创建元素vnode 等于render函数里面的 h=>h(App)
+  }); // 创建元素vnode 等于render函数里面的 h=>h(App)
   function createElement(vm, tag) {
     var data = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
     var key = data.key;
@@ -1553,7 +1552,8 @@
   function Vue(options) {
     // 这里开始进行Vue初始化工作
     this._init(options);
-  } // _init方法是挂载在Vue原型的方法 通过引入文件的方式进行原型挂载需要传入Vue
+  } // 在Vue原型上增加了一些方法和变量
+  // _init方法是挂载在Vue原型的方法 通过引入文件的方式进行原型挂载需要传入Vue
   // 此做法有利于代码分割
 
 
@@ -1565,5 +1565,5 @@
 
   return Vue;
 
-})));
+}));
 //# sourceMappingURL=vue.js.map
