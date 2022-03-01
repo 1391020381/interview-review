@@ -300,10 +300,7 @@
 
             if (Array.isArray(value)) {
               // 如果数据结构类似 {a:[1,2,[3,4,[5,6]]]} 这种数组多层嵌套  数组包含数组的情况  那么我们访问a的时候 只是对第一层的数组进行了依赖收集 里面的数组因为没访问到  所以五大收集依赖  但是如果我们改变了a里面的第二层数组的值  是需要更新页面的  所以需要对数组递归进行依赖收集
-              if (Array.isArray(value)) {
-                // 如果内部还是数组
-                dependArray(value); // 不停的进行依赖收集
-              }
+              dependArray(value); // 不停的进行依赖收集
             }
           }
         }
@@ -1048,7 +1045,7 @@
     // _c代表创建元素 _v代表创建文本 _s代表文Json.stringify--把对象解析成文本
 
     var code = generate(ast);
-    console.log('compileToFunctions-ast', ast); //   使用with语法改变作用域为this  之后调用render函数可以使用call改变this 方便code里面的变量取值
+    console.log('compileToFunctions-code', code); //   使用with语法改变作用域为this  之后调用render函数可以使用call改变this 方便code里面的变量取值
 
     var renderFn = new Function("with(this){return ".concat(code, "}"));
     return renderFn;
@@ -1555,6 +1552,7 @@
   } // 在Vue原型上增加了一些方法和变量
   // _init方法是挂载在Vue原型的方法 通过引入文件的方式进行原型挂载需要传入Vue
   // 此做法有利于代码分割
+  // Vue.prototype._init     Vue.prototype.$mount  
 
 
   initMixin$1(Vue);

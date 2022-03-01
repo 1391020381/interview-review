@@ -10,15 +10,15 @@
 
 <body>
     <div id="app">
-        <p>123456</p>
+        {{aa}}--{{bb}}--{{cc}}
     </div>
 
     <script src="/dist/vue.js"></script>
     <script>
         // Vue实例化
-        Vue.component('abc', {
-            template: '<div>abc</div>'
-        })
+        // Vue.component('abc', {
+        //     template: '<div>abc</div>'
+        // })
         let vm = new Vue({
             el: "#app",
             data() {
@@ -32,11 +32,11 @@
             //   return h('div',{id:'a'},'hello')
             // },
             //  template: `<div id="a">hello 这是我自己写的Vue{{computedName}}{{cc}}</div>`,
-            computed: {
-                computedName() {
-                    return this.aa + this.bb;
-                },
-            },
+            // computed: {
+            //     computedName() {
+            //         return this.aa + this.bb;
+            //     },
+            // },
         });
         // 当我们每一次改变数据的时候  渲染watcher都会执行一次 这个是影响性能的
         setTimeout(() => {

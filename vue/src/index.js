@@ -11,6 +11,8 @@ function Vue(options) {
 // 在Vue原型上增加了一些方法和变量
 // _init方法是挂载在Vue原型的方法 通过引入文件的方式进行原型挂载需要传入Vue
 // 此做法有利于代码分割
+
+// Vue.prototype._init     Vue.prototype.$mount  
 initMixin(Vue);
 renderMixin(Vue);
 lifecycleMixin(Vue);

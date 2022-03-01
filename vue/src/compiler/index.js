@@ -17,7 +17,7 @@ export function compileToFunctions(template) {
     // 类似_c('div',{id:"app"},_c('div',undefined,_v("hello"+_s(name)),_c('span',undefined,_v("world"))))
     // _c代表创建元素 _v代表创建文本 _s代表文Json.stringify--把对象解析成文本
     let code = generate(ast);
-    console.log('compileToFunctions-ast', ast)
+    console.log('compileToFunctions-code', code)
     //   使用with语法改变作用域为this  之后调用render函数可以使用call改变this 方便code里面的变量取值
     let renderFn = new Function(`with(this){return ${code}}`);
     return renderFn;
