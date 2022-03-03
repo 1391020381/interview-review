@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>防抖</title>
+</head>
+
+<body>
+    <script>
+        // 防抖的原理就是: 你尽管触发事件,但是我一定在事件触发n秒后才执行，
+        // 如果你在一个事件触发的n秒内又触发了这个事件
+        // 那我就以新的事件的时间为准,n秒后才执行
+        // 总之,就是要等你触发完事件n秒内不再触发事件,我才执行。
+        function debounce(func, wait) {
+            var timeout;
+            return function () {
+                var context = this;
+                var args = arguments;
+                clearTimeout(timeout)
+                timeout = setTimeout(function () {
+                    func.apply(context, args)
+                }, wait)
+            }
+        }
+    </script>
+</body>
+
+</html>
