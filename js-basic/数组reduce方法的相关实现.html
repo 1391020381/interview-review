@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        const runPromiseInSequence = (array, value) => array.reduce(
+            (promiseChain, currentFunction) => promiseChain.then(currentFunction),
+            Promise.resolve(value)
+        )
+        function runPromiseInSequence(array, value) {
+            return array.reduce(function (promiseChain, currentFunction) {
+                return promiseChain.then(currentFunction)
+            }, Promise.resolve(value))
+        }
+    </script>
+
+
+    <script>
+        // reduce 实现pipe
+        // pipe(f,g,h)是一个curry化函数,它返回一个新的函数,这个新的函数将会完成(...args)=>h(g(f(...args)))
+        // 即pipe方法返回的函数会接受一个参数,这个参数传递给pipe方法第一个参数，以供其调用
+        function pipe(...functions) {
+            return function (input) {
+                return functions.reduce((acc, fn) => {
+                    return fn(acc)
+                }, input)
+            }
+        }
+    </script>
+    <script>
+        // compose 实现的几种方案
+        // compose fn1(fn2(fn3(fn4(args))))
+        // pipe
+        // fn4(fn3(fn2(fn1(args))))
+        function compose(...args) {
+            let length = args.length;
+            let count = length - 1;
+            let result;
+            return function f1(...arg1) {
+                // 执行最右侧函数
+                result = args[count].apply(this, arg1)
+                if (count <= 0) {
+                    count = length - 1;
+                    return result
+                }
+                count--
+                return f1.call(null, result)
+            }
+        }
+        const reduceFunc = (f, g) => (...arg) => g.call(this, f.apply(this, arg))
+        function reduceFunc(f, g) {
+            return function (...arg) {
+                return g.call(this, f.apply(this, arg))
+            }
+        }
+        const compose = (...args) => args.reverse().reduce(reduceFunc, args.shift())
+        function compose(...args) {
+            return args.reverse().reduce(reduceFunc, args.shift())
+        }
+
+    </script>
+    <script>
+        const compose = (...args) => {
+            let init = args.pop()
+            return (...arg) =>
+                args.reverse().reduce((sequence, func) =>
+                    sequence.then(result => func.call(null, result))
+                    , Promise.resolve(init.apply(null, arg)))
+        }
+        function compose(...args) {
+            let init = args.pop();
+            return function (...arg) {
+                return args.reverse.reduce(function (sequence, func) {
+                    return sequence.then(function (result) {
+                        return fun.call(null, result)
+                    }, Promise.resolve(init.apply(null, arg)))
+                })
+            }
+        }
+    </script>
+</body>
+
+</html>
