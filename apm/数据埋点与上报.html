@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数据埋点与上报</title>
+</head>
+
+<body>
+    <div>FP</div>
+    <script>
+        // FP
+        function getFPTime() {
+            const timings = performance.getEntriesByType('paint')[0];
+            return timings ? Math.round(timings.startTime) : null
+        }
+        // FCP
+
+        const domEntries = []
+        const observer = new MutationObserver((mutationsList) => {
+            for (var mutation of mutationsList) {
+                if (mutation.type == 'childList') {
+                    console.log('A child node has been added or removed')
+                }
+                if (mutation.type == 'addedNodes') {
+                    domEntries.push(mutation)
+                }
+            }
+        })
+        function getFPTime() {
+            const timings = performance.getEntriesByType('paint');
+            if (timings.length > 1) return timings[1]
+            return timings ? Math.round(timings.startTime) : null;
+        }
+        // FID
+        function getFIDTime() {
+            const timings = performance.getEntriesByType('first-input')[0];
+            return timings ? timings : null;
+        }
+        import ttiPolyfill from 'tti-polyfill';
+
+        ttiPolyfill.getFirstConsistentlyInteractive().then((tti) => {
+            ga('send', 'event', {
+                eventCategory: 'Performance Metrics',
+                eventAction: 'TTI',
+                eventValue: tti,
+                nonInteraction: true,
+            });
+        });
+    </script>
+</body>
+
+</html>
