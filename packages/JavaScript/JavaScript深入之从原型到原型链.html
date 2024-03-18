@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript深入之从原型到原型链.html</title>
+</head>
+<body>
+    <script>
+        // 构造函数创建对象
+        function Person(){
+
+        }
+        var person = new Person();
+        person.name = 'Kevin';
+        console.log(person.name)
+
+        // prototype
+        // 每个函数都有一个 prototype 属性 
+        // prototype 是函数才会有的属性
+        Person.prototype.nickName = 'justdoit';
+        var person1 = new Person();
+        var person2 = new Person();
+        console.log(person1.nickName);
+        console.log(person2.nickName)
+
+        console.log(person1.__proto__ === Person.prototype)
+        
+    // 每个JavaScript对象(null除外)在创建的时候就会与之关联另外一个对象,这个对象就是我们所说的原型,每个对象都会从原型 '继承'属性
+    
+    // 每一个JavaScript对象(null除外)都具有的一个属性,叫__proto__ 这个属性会指向该对象的原型。
+
+
+     // Person   new    person
+     //  person  __proto__   Person.prototype
+     //  Person.prototype.constructor    Person
+    </script>
+</body>
+</html>
