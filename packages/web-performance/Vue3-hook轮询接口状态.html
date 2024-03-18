@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vue3-hook轮询接口状态</title>
+  </head>
+  <body>
+    <script>
+      import { ref } from "vue";
+      import axios from "axios";
+
+      export function usePolling(url, interval, maxAttempts) {
+        const data = ref(null);
+        let attempts = 0;
+
+        const poll = async () => {
+          try {
+            const response = await axios.get(url);
+            if (response.data.status === "your expected status") {
+              data.value = response.data;
+            } else if (attempts < maxAttempts) {
+              attempts++;
+              setTimeout(poll, interval);
+            }
+          } catch (error) {
+            console.log(error);
+          }
+        };
+
+        poll();
+
+        return data;
+      }
+    </script>
+  </body>
+</html>
