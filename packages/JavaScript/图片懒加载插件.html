@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>图片懒加载插件</title>
+  </head>
+  <body>
+    <script>
+      // MutationObserver 用于观察dom变化
+      class LazyLoadImages {
+        constructor() {
+          // 选择所有data-src属性的图片
+          this.images = document.querySelectorAll("[data-src]");
+          this.options = {
+            root: null, // 用来观察目标元素交叉状态的容器元素。如果未指定,那么默认为浏览器的视窗。
+            rootMargin: "0px", // 在 root边缘预设一定偏移量,特定的margin值,类似 css的margin。
+            threshold: 0.01, // 是一个数值或者数值数组,表示观察的元素的交叉程度达到多少时触发回调。 比如设为0.5 则元素的50%进入视窗时,会触发回调。默认是0
+          };
+
+          this.onIntersection = this.onIntersection.bind(this);
+          this.observer = new IntersectionObserver(
+            this.onIntersection,
+            this.options
+          );
+
+          this.images.forEach((image) => this.observer.observe(image));
+        }
+
+        // 当元素进入/离开视口时这个方法会被触发
+        onIntersection(entries) {
+          entries.forEach((entry) => {
+            // 如果图片还没有完全进入视口就返回, 这样我们就不会早早地加载图片
+            if (!entry.isIntersecting) return;
+
+            // 如果进入视口了就加载图片
+            this.loadImage(entry.target);
+
+            // 图片已经加载了就取消观察
+            this.observer.unobserve(entry.target);
+          });
+        }
+
+        // 加载图片的方法
+        loadImage(image) {
+          image.src = image.getAttribute("data-src");
+
+          // 当图片加载完成标记为已加载
+          image.onload = () => {
+            image.removeAttribute("data-src");
+          };
+        }
+      }
+
+      // 使用这个插件
+      new LazyLoadImages();
+    </script>
+  </body>
+</html>

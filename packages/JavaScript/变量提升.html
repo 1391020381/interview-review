@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>变量提升</title>
+  </head>
+  <body>
+    <script>
+      // Javascript 在编译阶段遵循两个规则处理变量和函数声明的提升（Hoisting）：
+
+      // 变量声明（包括函数参数）和函数声明都会被提升，但函数声明的优先级更高，会被提升到作用域的顶部。
+      // 如果一个变量（包括函数参数）和一个函数在同一个作用域内有相同的名字，函数声明会覆盖变量声明。
+
+      function print(s) {
+        console.log(s);
+        var s = 2;
+        function s() {}
+        console.log(s);
+      }
+      print(1);
+
+      /**
+       *  函数 print 创建了新的执行环境，形参 s 先被初始化为函数实参 1。
+然后，变量s和函数s进行提升：
+变量 s 由于存在同名参数，被忽略。
+函数 s 会覆盖现有的 s，使得 s 成为了一个函数。
+然后按行执行代码，console.log(s) 打印函数 s，然后变量 s 被重新赋值为 2，之后 console.log(s) 打印 2。
+       * 
+       * 
+       * */
+    </script>
+  </body>
+</html>
