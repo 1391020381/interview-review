@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>栈</title>
+  </head>
+  <body>
+    <script>
+      // 栈是一种后进先出的数据结构。
+      // 比如 冰柜放置冰淇淋。 先来的会被放在下面  后来的会放置在上面。 但是 后来的会先被拿走。 即 后进先出。
+      // 常见的实现方式  数组  push 数组尾部添加数据  pop 数组尾部取出数据。  后 push的会在 下面 使用 pop是会被先取出来。
+
+      // 初始状态，栈空
+      const stack = [];
+      // 入栈过程
+      stack.push("东北大板");
+      stack.push("可爱多");
+      stack.push("巧乐兹");
+      stack.push("冰工厂");
+      stack.push("光明奶砖");
+
+      // 出栈过程，栈不为空时才执行
+      while (stack.length) {
+        // 单纯访问栈顶元素（不出栈）
+        const top = stack[stack.length - 1];
+        console.log("现在取出的冰淇淋是", top);
+        // 将栈顶元素出栈
+        stack.pop();
+      }
+
+      // 栈空
+      stack; // []
+    </script>
+  </body>
+</html>

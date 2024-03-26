@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>链表</title>
+  </head>
+  <body>
+    <script>
+      // 链表  有且仅有一个前置 有且仅有一个后继。
+      var s = {
+        // 数据域
+        val: 1,
+        // 指针域，指向下一个结点
+        next: {
+          val: 2,
+          next: {},
+        },
+      };
+      class Node{
+         constructor(data,next = null){
+            this.data = data;
+            this.next = next;
+         }
+      }
+      class LinkedList {
+        constructor(){
+            this.head = null;
+        }
+        add (data){
+            const newNode = new Node(data);
+            if(!this.head){
+                this.head = newNode;
+            }else{
+                let current = this.head;
+                while(current.next){
+                    current = current.next
+                }
+                current.next = newNode;
+            }
+        }
+        delete(data){
+            if(this.head === null) return;
+            if(this.head.data === data) {
+                this.head = this.head.next
+                return
+            }
+            let prev = this.head;
+            let curr = prev.next
+            while(curr){
+                if(curr.data === data){
+                    prev.next = curr.next
+                    return
+                }
+                prev = curr;
+                curr = curr.next
+            }
+        }
+        update(oldData,newData){
+            let current = this.head;
+            while(current){
+                if(current.data === oldData){
+                    current.data = newData
+                }
+                current = current.next
+            }
+        }
+        find(data){
+            if(!this.head) return null;
+            let current = this.head;
+            while(current){
+                if(current.data === data){
+                    return current
+                }
+                current = current.next;
+            }
+        }
+      }
+      let ll = new LinkedList();
+      ll.add(1)
+      ll.add(2)
+      ll.add(3)
+      
+    </script>
+  </body>
+</html>

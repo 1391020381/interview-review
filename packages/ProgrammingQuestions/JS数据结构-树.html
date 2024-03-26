@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>树</title>
+  </head>
+  <body>
+    <script>
+      // 树
+      class TreeNode {
+        constructor(data) {
+          this.data = data;
+          this.children = [];
+        }
+
+        // 添加一个新的子节点
+        addChild(node) {
+          this.children.push(node);
+        }
+
+        // 移除一个指定的子节点
+        removeChild(node) {
+          this.children = this.children.filter((child) => child !== node);
+        }
+
+        // 深度优先遍历
+        traverseDepthFirst() {
+          console.log(this.data);
+          this.children.forEach((child) => child.traverseDepthFirst());
+        }
+      }
+
+      const root = new TreeNode("root");
+      const child1 = new TreeNode("child1");
+      const child2 = new TreeNode("child2");
+      const grandChild = new TreeNode("grandChild");
+
+      root.addChild(child1);
+      root.addChild(child2);
+      child1.addChild(grandChild);
+
+      // traverseDepthFirst 方法可以按深度优先原则遍历整颗树
+      root.traverseDepthFirst(); // 输出：root, child1, grandChild, child2
+    </script>
+  </body>
+</html>
