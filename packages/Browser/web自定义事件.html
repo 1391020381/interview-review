@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>自定义事件</title>
+  </head>
+  <body>
+    <script>
+      // 创建一个自定义事件
+      // 'build'是自定义事件的名字。
+      // 在这个例子中，我们还为事件定义了一个额外的数据 'detail'， 这个数据可以在监听器中获取到
+      let event = new CustomEvent("build", {
+        detail: {
+          floor: "first floor",
+        },
+      });
+
+      // 监听事件
+      document.addEventListener(
+        "build",
+        function (e) {
+          console.log(e.detail); // 输出：{floor: "first floor"}
+        },
+        false
+      );
+
+      // 触发事件
+      document.dispatchEvent(event);
+    </script>
+
+    <script>
+      // 创建一个自定义事件
+      // 'build'是自定义事件的名字。
+      // 在这个例子中，我们还为事件定义了一个额外的数据 'detail'， 这个数据可以在监听器中获取到
+      let event2 = new CustomEvent("build", {
+        detail: {
+          floor: "first floor",
+        },
+      });
+
+      // 监听事件
+      document.addEventListener(
+        "build",
+        function (e) {
+          console.log(e.detail); // 输出：{floor: "first floor"}
+        },
+        false
+      );
+
+      // 触发事件
+      document.dispatchEvent(event);
+    </script>
+  </body>
+</html>

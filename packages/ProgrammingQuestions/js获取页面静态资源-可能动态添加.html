@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>js获取页面静态资源-可能动态添加</title>
+  </head>
+  <body>
+    <script>
+      // 首次获取页面中所有的JS、CSS、图片资源
+      var scripts = Array.from(document.scripts).map((script) => script.src);
+      var links = Array.from(document.styleSheets).map((link) => link.href);
+      var img = Array.from(document.images).map((image) => image.src);
+
+      console.log("Existing Scripts:", scripts);
+      console.log("Existing CSS:", links);
+      console.log("Existing Images:", img);
+
+      // 创建一个观察者对象
+      var observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+          mutation.addedNodes.forEach((node) => {
+            if (node.tagName === "SCRIPT") {
+              console.log("New Script:", node.src);
+            }
+            if (node.tagName === "LINK" && node.rel === "stylesheet") {
+              console.log("New CSS:", node.href);
+            }
+            if (node.tagName === "IMG") {
+              console.log("New Image:", node.src);
+            }
+          });
+        });
+      });
+
+      // 配置观察选项:
+      var config = {
+        childList: true,
+        subtree: true,
+      };
+
+      // 传入目标节点和观察选项
+      observer.observe(document.body, config);
+    </script>
+  </body>
+</html>
