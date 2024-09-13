@@ -5,7 +5,7 @@
 * 插件进程
 
 
-* [HTTP 请求流程示意图](https://static001.geekbang.org/resource/image/1b/6c/1b49976aca2c700883d48d927f48986c.png?wh=1142*423)
+* ![HTTP 请求流程示意图](https://static001.geekbang.org/resource/image/1b/6c/1b49976aca2c700883d48d927f48986c.png?wh=1142*423)
 
 * 响应行返回的状态码是 301，状态 301 就是告诉浏览器，我需要重定向到另外一个网址，而需要重定向的网址正是包含在响应头的 Location 字段中，接下来，浏览器获取 Location 字段中的地址，并使用该地址重新导航，这就是一个完整重定向的执行流程。
 
