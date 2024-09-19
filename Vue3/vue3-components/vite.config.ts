@@ -5,13 +5,13 @@ import path from 'path';
 // export default defineConfig({
 //   plugins: [vue()],
 // })
-export default {
+export default defineConfig({
   plugins:[vue()],
   build: {
     lib: {
       entry: path.resolve(__dirname, 'src/components/index.ts'),
       name: 'MyComponentLibrary',
-      fileName: format => `my-component-library.${format}.js`
+      fileName: (format:any) => `my-component-library.${format}.js`
     },
     rollupOptions: {
       external: ['vue'],
@@ -22,4 +22,4 @@ export default {
       }
     }
   }
-}
+})
