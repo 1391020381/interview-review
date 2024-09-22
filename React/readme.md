@@ -89,3 +89,48 @@
 * 这节我们实现了 umd 的支持，通过 webpack 做了打包。
 * 打包逻辑很简单：用 ts-loader 来编译 typescript 代码，然后 react、react-dom 等模块用 externals 的方式引入就好了。
 * 再就是 react 通过 externals 的方式，会导致 react/jsx-runtime 引入有问题，所以我们修改了 tsconfig.json 的 jsx 的编译为 react，也就是编译成 React.createElement 的代码。
+
+
+
+# Vite打包
+
+```
+import { defineConfig } from 'vite';
+import reactRefresh from '@vitejs/plugin-react-refresh';
+import styleImport from 'vite-plugin-style-import';
+
+export default defineConfig({
+  plugins: [
+    reactRefresh(),
+    styleImport({
+      libs: [
+        {
+          libraryName: 'my-react-library',
+          esModule: true,
+          resolveStyle: (name) => {
+            return `src/components/${name}/style.scss`; // 根据实际情况调整路径
+          },
+        },
+      ],
+    }),
+  ],
+  build: {
+    lib: {
+      entry: 'src/index.tsx',
+      name: 'MyReactLibrary',
+      fileName: (format) => `my-react-library.${format}.js`
+    },
+    rollupOptions: {
+      external: ['react', 'react-dom'],
+      output: {
+        globals: {
+          react: 'React',
+          'react-dom': 'ReactDOM'
+        }
+      }
+    }
+  }
+});
+
+
+```
