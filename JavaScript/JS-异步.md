@@ -98,7 +98,7 @@ getGenPromise(gen).then((response) => {
 
 ```
 
-// 模拟 co 函数的实现
+// 模拟 co 函数的实现 generatorFunc  Promise.resolve().then(res=>{}) 递归  {done:true,value:1}
 function co(generatorFunc) {
   return function () {
     const generator = generatorFunc.apply(this, arguments);
