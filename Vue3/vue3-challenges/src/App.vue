@@ -1,6 +1,6 @@
 <template>
   <nav>
-    <RouterLink to="/">Go to Home</RouterLink>
+    <RouterLink to="/">Go to Homexxxxxx</RouterLink>
     <RouterLink to="/about">Go to About</RouterLink>
   </nav>
   <main>
