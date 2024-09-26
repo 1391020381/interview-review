@@ -1,6 +1,6 @@
 
 <template>
-  <button @click="handleClick">{{ label }}</button>
+  <button @click="handleClick" class="btn">{{ label }}</button>
 </template>
 
 <script lang="ts">
@@ -16,7 +16,8 @@ export default defineComponent({
   },
   setup(props, { emit }) {
     const handleClick = () => {
-      emit('click')
+      console.log('Button')
+      emit('ButtonClick')
     }
 
     return {
@@ -26,3 +27,8 @@ export default defineComponent({
   }
 })
 </script>
+<style lang="less" >
+.btn{
+  color: red;
+}
+</style>
