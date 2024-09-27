@@ -1,3 +1,10 @@
+* craftjs 其实就是一个编辑。
+* lowcode 其实就是 对 jsonTree的 crud。 
+    -  其中就依赖 拖拽组件库  
+    - 右侧属性面板触发画布重新编译(hoc)
+    - iframe   zustand  在线代码编辑器及sucrase 编译全局代码   动态执行能力。
+    - json -> 组装渲染
+
 * 全局代码
 
 
