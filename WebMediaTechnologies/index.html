@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MSE Example</title>
+</head>
+<body>
+  <video id="videoElement" controls autoplay></video>
+  <script>
+    // 1. 创建 MediaSource 对象
+    const mediaElement = document.getElementById('videoElement');
+    const mediaSource = new MediaSource();
+
+    // 将 MediaSource 对象与媒体元素关联
+    mediaElement.src = URL.createObjectURL(mediaSource);
+
+    // 2. 监听 sourceopen 事件
+    mediaSource.addEventListener('sourceopen', (event) => {
+      // 3. 创建 SourceBuffer 对象
+      const sourceBuffer = mediaSource.addSourceBuffer('video/mp4; codecs="avc1.64001f"');
+
+      // 4. 添加媒体数据
+      fetch('path/to/video.mp4')
+        .then((response) => response.blob())
+        .then((blob) => {
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            sourceBuffer.appendBuffer(event.target.result);
+          };
+          reader.readAsArrayBuffer(blob);
+        });
+
+      // 5. 处理播放事件
+      mediaElement.addEventListener('play', () => {
+        console.log('Video is playing');
+      });
+
+      mediaElement.addEventListener('pause', () => {
+        console.log('Video is paused');
+      });
+    });
+  </script>
+</body>
+</html>
