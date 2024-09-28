@@ -1,6 +1,18 @@
 # interview-review
 interview-review
 
+
+* 基础 -> js browser  vue react 工程化架构 算法设计模式     刷题验证
+
+* 项目
+* lowcode 详细细节    nestjs nodejs
+* SSR  express直出模版  细化
+* 性能优化 APM    Sentry 运维部署问题 -> 结合 埋点SDK BI数据  掘金小册  极客时间
+* 微前端   细化实战
+* Electron 
+
+* 带团队
+
 同源策略 跨域  Content Security Policy (CSP)
 
 回流 重排
