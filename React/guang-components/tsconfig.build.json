@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+      "declaration": true,
+      "allowSyntheticDefaultImports": true,
+      "target": "es2015",
+      "lib": ["ES2020", "DOM", "DOM.Iterable"],
+      "module": "ESNext",
+      "skipLibCheck": true,
+      "moduleResolution": "Node",
+      "resolveJsonModule": true,
+      "isolatedModules": true,
+      "jsx": "react-jsx",  //  表示将 JSX 转换为 React.createElement 调用
+      "allowImportingTsExtensions":null,
+      "strict": true,
+    },
+    "include": [
+      "src"
+    ],
+    "exclude": [
+      "src/**/*.test.tsx",
+      "src/**/*.stories.tsx"
+    ]
+}
