@@ -1,0 +1,1 @@
+export const say = 'PS：请查看README.md后学习各小节内容';
