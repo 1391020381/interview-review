@@ -1,3 +1,5 @@
+* [讲讲我做低代码平台这一年](https://juejin.cn/post/7254104833514618917)
+
 * pnpm workspace组织代码,并抽离以下核心功能。
 1. 利用HOC能力,抽取物料组件craftjs功能。
 2. 利用 iframe沙盒提供动态执行js能力。
@@ -51,3 +53,8 @@ export const fetchData  = async(cb)=>{
 ```
 
 * 绑定多个函数,并且通过 pipeline进行串联
+
+
+* 回滚  保存两份 jsonschema 重新编译
+
+* 组件单独发布  json 中版本号
