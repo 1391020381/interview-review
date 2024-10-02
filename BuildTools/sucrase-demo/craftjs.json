@@ -1,0 +1,58 @@
+{
+    "ROOT": {
+        "type": {
+            "resolvedName": "__Provider__"
+        },
+        "isCanvas": true,
+        "props": {
+            "backgroundColor": "#FFF",
+            "height": "100%",
+            "width": "100%"
+        },
+        "displayName": "Provider",
+        "custom": {
+            "useCanvas": true,
+            "useResize": false
+        },
+        "hidden": false,
+        "nodes": [
+            "yWMQe5ad2k",
+            "gOmXzGOlMT"
+        ],
+        "linkedNodes": {}
+    },
+    "yWMQe5ad2k": {
+        "type": {
+            "resolvedName": "MUI_Button"
+        },
+        "isCanvas": false,
+        "props": {
+            "__events__": [
+                {
+                    "name": "onClick",
+                    "fn": "\n\nfunction () {\n  console.log('hello onMessagexxxxxx')\n  alert2();\n}"
+                }
+            ],
+            "$$children": "自定义JS"
+        },
+        "displayName": "按钮",
+        "custom": {},
+        "parent": "ROOT",
+        "hidden": false,
+        "nodes": [],
+        "linkedNodes": {}
+    },
+    "gOmXzGOlMT": {
+        "type": {
+            "resolvedName": "MUI_Button"
+        },
+        "isCanvas": false,
+        "props": {},
+        "displayName": "按钮",
+        "custom": {},
+        "parent": "ROOT",
+        "hidden": false,
+        "nodes": [],
+        "linkedNodes": {}
+    }
+}
