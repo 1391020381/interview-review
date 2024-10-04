@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>上报缓存命中率指标示例</title>
+    <link
+      rel="prefetch"
+      href="https://static.zhihu.com/heifetz/6116.216a26f4.7e059bd26c25b9e701c1.css"
+    />
+  </head>
+  <body>
+    <script>
+      // 上报 counter 计数类型 数据到 Grafana
+      async function report(name, labels, help = 'default help') {
+        await fetch('http://localhost:4001/counter-metric', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            name,
+            help,
+            labels,
+          }),
+        });
+      }
+
+      // 检查资源加载是否命中缓存
+      function checkResourceCacheHit() {
+        // 获取页面加载性能信息
+        const perfEntries = performance.getEntriesByType('resource');
+
+        for (const entry of perfEntries) {
+          // 选项1：
+          // 使用 transferSize <=0 判断是否命中缓存，但是跨域域名需要配置响应头Timing-Allow-Origin
+          // let hitCache = entry.transferSize <= 0;
+          // 选项2：
+          // 判断资源的加载时间 duration是否小于50毫秒
+          // 50ms 来自于经验总结，可以根据实际情况调整
+          let hitCache = entry.duration < 50;
+          report(
+            'cacheHiteRate',
+            { 
+                hitCache, 
+                name: entry.name
+            },
+            '缓存命中率计数指标'
+          );
+        }
+      }
+
+      setTimeout(() => {
+        checkResourceCacheHit();
+      }, 3000);
+    </script>
+  </body>
+</html>
