@@ -1,0 +1,15 @@
+{
+    "traceId": "0bdf6c8e-25c8-427d-847a-9950318a2e14",
+    "level": "TraceLevelType.warn",
+    "type": "TraceTypes.ACTION",
+    "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+    "bt": "BrowserType.MOBILE",
+    "fpId": "c77a37f4",
+    "uid": "1002",
+    "appId": "geekbang-app",
+    "clientType": "TraceClientTypes.iOS_H5",
+    "pid": "088c8a92-5a24-4144-9c37-310848c397e1",
+    "url": "https://time.geekbang.org/",
+    "createdAt": "",
+    "updatedAt": ""
+}
