@@ -1,5 +1,23 @@
 * [讲讲我做低代码平台这一年](https://juejin.cn/post/7254104833514618917)
 
+* 要解决组件拖拽 通过配置面板更新组件状态 以及生成 jsontree 并根据 jsontree 渲染组件等能力,我们可以基于浏览器的原生API进行实现,但考虑到经济性和成本性原因 直接使用 craftjs 比较方便。
+
+* craftjs 其本质上是一个网页编辑器框架,基于 React技术栈,核心实现了组件在画布中 创建 自定义组件配置面板 组件状态动态更新 操作记录回滚等能力,提供相应的api供我们开箱即用.
+    - 封装三大通用能力
+    - 组件布局及拖拽
+    - 组件事件配置 页面请求 请求接口 组件联动
+    - 多页面路由系统
+
+React.meon(component) useMon useCalback
+
+* Monorepo组件库仓库  低代码组件开发脚手架 -> 发布 低代码组件资源管理平台
+* 低代码平台初始化动态拉取组件资源    -> 组件资源解析SDK 渲染 -> 组件面板
+
+* 组件事件  组件本身支持的事件 -> 
+
+* drag  event.dataTransfer.setData("Text", event.target.id);
+
+
 * pnpm workspace组织代码,并抽离以下核心功能。
 1. 利用HOC能力,抽取物料组件craftjs功能。
 2. 利用 iframe沙盒提供动态执行js能力。

@@ -5,6 +5,20 @@
 // windo.fetch  = interceptFetch({})
 // onVitals(traceSdk.createPerfRepoet())
 // setInterval(()=>{},)
+
+
+// this.perfData = {}
+// this.observer = new PerformanceObserver()
+// log  saveBreadcremb()
+// saveBreadcremb  this.breadcrumb.push()
+// info
+// warn
+// error
+// setTraceData   {type,level,createdAt,updatedAt,data:_data,perf,breadcrumbs}
+// send -> sendByImg
+// createPerfReport   
+// saveError  
+// onGlobalClick()
 export class BaseTrace {
     public dsn:string = ''
     public pageId:string = ''
