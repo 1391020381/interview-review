@@ -3,6 +3,7 @@
 
 * [monitor-fe](https://github.com/wangkaiwd/monitor-fe)
 
+* [哦吼！前端异常处理一站式详解🤩（大量DEMO，很干很干）](https://juejin.cn/post/7352661916387475494)
 
 * 上线前验证
 * 上线后量化评估  
