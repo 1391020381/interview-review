@@ -23,6 +23,16 @@
 2. 非原始值的响应式方案
 3. 原始值的响应式方案
 
+* Proxy  Reflect effect  track trigger   WeakMap 数据结构
+    - effect  effectFn()  
+    - effect cleanup   activeEffect.deps.push(deps)   set 会先触发 get 然后再触发 set
+    - effect effectStack 嵌套effect
+    - effect scheduler  trigger -> scheduler(effect)  jobQueue.add(fn)     flushJob() 
+    - computer  watcher  flush  
+
+    - 非原始值  
+* 拓展运算符
+* 如上面的代码所示，首先创建一个响应式的数据对象 obj，然后 使用展开运算符得到一个新的对象 newObj，它是一个普通对象，不具 有响应能力。这里的关键点在于，副作用函数内访问的是普通对象 newObj，它没有任何响应能力，所以当我们尝试修改 obj.foo 的值 时，不会触发副作用函数重新执行。
 
 ![WeakMap-Map-Set](./img/WeakMap-Map-Set.jpg)
 
