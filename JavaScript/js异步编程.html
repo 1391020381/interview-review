@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>js异步编程</title>
+  </head>
+  <body>
+    <script>
+        // 最后包装成 Promise 对象进行返回
+
+const readFilePromise = (filename) => {
+
+return new Promise((resolve, reject) => {
+
+  fs.readFile(filename, (err, data) => {
+
+    if(err) {
+
+      reject(err);
+
+    }else {
+
+      resolve(data);
+
+    }
+
+  })
+
+}).then(res => res);
+
+}
+
+let g = gen();
+
+// 这块和上面 thunk 的方式一样
+
+const gen = function* () {
+
+const data1 = yield readFilePromise('1.txt')
+
+console.log(data1.toString())
+
+const data2 = yield readFilePromise('2.txt')
+
+console.log(data2.toString)
+
+}
+
+// 这块和上面 thunk 的方式一样
+
+function run(gen){
+
+const next = (err, data) => {
+
+  let res = gen.next(data);
+
+  if(res.done) return;
+
+  res.value.then(next);
+
+}
+
+next();
+
+}
+
+run(g);
+
+    </script>
+    <script>
+      let loadImg = (urlId) => {
+        const url = `https://www.image.com/${urlId}`;
+        return new Promise((resolve, reject) => {
+          const img = new Image();
+          img.onerror = function () {
+            reject(urlId);
+          };
+          img.onload = function () {
+            resolve(urlId);
+          };
+          img.src = url;
+        });
+      };
+      // 一般是对异步操作的封装  比如网络请求
+      // 定义一个函数 接受一个 url参数
+      // 返回一个 return new Promise((resole,reject)=>{})
+      // Promise 是对异步状态的封装
+      // Promise 会 执行 executor  会触发异步状态的改变
+      // Promise 会有三种 
+      let urlIds = [1, 2, 3, 4, 5];
+      urlIds.reduce((prevPromise, urlId) => {
+        return prevPromise.then(() => loadImg(urlId));
+      }, Promise.resolve());
+
+      const loadImgOneByOne = async () => {
+        for (i of urlIds) {
+          await loadImg(urlIds[i]);
+        }
+      };
+      loadImgOneByOne();
+
+
+
+      const loadByLimit = (urlIds, loadImg, limit) => {
+ const urlIdsCopy = […urlIds]
+
+ if (urlIdsCopy.length <= limit) {
+  // 如果数组长度小于最大并发数，直接全部请求
+  const promiseArray = urlIds.map(urlId => loadImg(urlId))
+     return Promise.all(promiseArray)
+ }
+
+ // 注意 splice 方法会改变 urlIdsCopy 数组
+ const promiseArray = urlIdsCopy.splice(0, limit).map(urlId => loadImg(urlId)) 
+
+ urlIdsCopy.reduce(
+  (prevPromise, urlId) => 
+   prevPromise
+    .then(() => Promise.race(promiseArray))
+    .catch(error => {console.log(error)})
+    .then(resolvedId => {
+     // 将 resolvedId 剔除出 promiseArray 数组
+     // 这里的删除只是伪代码，具体删除情况要看后端 Api 返回结果
+     let resolvedIdPostion = promiseArray.findIndex(id => resolvedId === id)
+     promiseArray.splice(resolvedIdPostion, 1)
+     promiseArray.push(loadImg(urlId))
+    })
+  , 
+  Promise.resolve()
+ )
+ .then(() => Promise.all(promiseArray))
+}
+    </script>
+  </body>
+</html>
