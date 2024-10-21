@@ -1,3 +1,59 @@
+* [wujie](https://wujie-micro.github.io/doc/guide/start.html)
+
+```
+import { bus, setupApp,preloadApp,startApp,destroyApp } from 'wujie';
+
+// wujie-vue  wujie-react
+
+// 设置子应用
+
+setupApp({ name: "唯一id", url: "子应用地址", exec: true, el: "容器", sync: true })
+
+preloadApp({name:"唯一id"})
+
+// 启动子应用
+
+startApp({name:"唯一id"})
+
+
+// 子应用 设置 cors
+
+app.use((req, res, next) => {
+  // 路径判断等等
+  res.set({
+    "Access-Control-Allow-Credentials": true,
+    "Access-Control-Allow-Origin": req.headers.origin || "*",
+    "Access-Control-Allow-Headers": "X-Requested-With,Content-Type",
+    "Access-Control-Allow-Methods": "PUT,POST,GET,DELETE,OPTIONS",
+    "Content-Type": "application/json; charset=utf-8",
+  });
+  // 其他操作
+});
+
+
+// 子应用生命周期改造
+
+if (window.__POWERED_BY_WUJIE__) {
+  let instance;
+  window.__WUJIE_MOUNT = () => {
+    const router = createRouter({ history: createWebHistory(), routes });
+    instance = createApp(App);
+    instance.use(router);
+    instance.mount("#app");
+  };
+  window.__WUJIE_UNMOUNT = () => {
+    instance.unmount();
+  };
+} else {
+  createApp(App).use(createRouter({ history: createWebHistory(), routes })).mount("#app");
+}
+
+ <!--单例模式，name相同则复用一个无界实例，改变url则子应用重新渲染实例到对应路由 -->
+  <WujieVue width="100%" height="100%" name="vue2" :url="vue2Url" :sync="true"></WujieVue>
+
+  
+```
+
 * [wujie & qiankun 原理浅析](https://juejin.cn/post/7307451255431987210)
 # 应用加载机制和 js 沙箱机制
 * 利用iframe实现沙箱,让子应用脚本在 iframe里运行,利用Web component的 custom element 和 shadow dom 实现样式隔离。
