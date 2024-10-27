@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require("electron");
+const { app, BrowserWindow,ipcMain } = require("electron");
 const path = require('node:path')
 const createWindow = () => {
   const mainWindow = new BrowserWindow({
@@ -10,10 +10,14 @@ const createWindow = () => {
     }
   });
   mainWindow.loadFile("index.html");
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
 };
 
 app.whenReady().then(() => {
+  ipcMain.handle('ping',()=>{
+    console.log('ipcMain.handle')
+    return 'pong'
+  })
   createWindow();
   app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) {
