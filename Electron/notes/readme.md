@@ -62,6 +62,9 @@ contextBridge.exposeInMainWorld('myAPI', {
     - Nodejs的API
     - Node.js调用原生能力  Nodejs的C++
 
+* [Electron Proxy代理设置](http://lublank.com/2019/12/14/electron-proxy/)
+    - win.webContents.session.setProxy
+
 
 # electron 项目打包，部署，更新，管理。
 * 全量更新
