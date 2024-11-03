@@ -1,0 +1,19 @@
+{
+  "name": "INP",
+  "value": 8,
+  "rating": "good",
+  "delta": 8,
+  "entries": [
+    {
+      "name": "pointerdown",
+      "entryType": "first-input",
+      "startTime": 36701.30000114441,
+      "duration": 8,
+      "processingStart": 36702.80000114441,
+      "processingEnd": 36702.80000114441,
+      "cancelable": true
+    }
+  ],
+  "id": "v3-1695054859140-4977365532114",
+  "navigationType": "reload"
+}

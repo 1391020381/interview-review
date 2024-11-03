@@ -1,0 +1,22 @@
+{
+  "name": "LCP",
+  "value": 463.20000076293945,
+  "rating": "good",
+  "delta": 463.20000076293945,
+  "entries": [
+    {
+      "name": "",
+      "entryType": "largest-contentful-paint",
+      "startTime": 463.20000076293945,
+      "duration": 0,
+      "size": 8985,
+      "renderTime": 463.2,
+      "loadTime": 0,
+      "firstAnimatedFrameTime": 0,
+      "id": "",
+      "url": ""
+    }
+  ],
+  "id": "v3-1695054859140-6431611124119",
+  "navigationType": "reload"
+}

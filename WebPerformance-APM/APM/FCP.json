@@ -1,0 +1,16 @@
+{
+  "name": "FCP",
+  "value": 463.20000076293945,
+  "rating": "good",
+  "delta": 463.20000076293945,
+  "entries": [
+    {
+      "name": "first-contentful-paint",
+      "entryType": "paint",
+      "startTime": 463.20000076293945,
+      "duration": 0
+    }
+  ],
+  "id": "v3-1695054859140-2991050486027",
+  "navigationType": "reload"
+}
