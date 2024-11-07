@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FPS</title>
+</head>
+<body>
+ <script>
+  let frameCount = 0;
+  let lastTime = performance.now()
+  let fpsInterval = 1000    // 1 秒
+  let fps = 0;
+  function calculateFPS(currentTime){
+    frameCount++
+    const elapsedTime = currentTime - lastTime;
+    if(elapsedTime >= fpsInterval){
+        fps = (frameCount / (elapsedTime / 1000)).toFixed(2)
+        frameCount = 0;
+        lastTime = currentTime;
+        console.log(`FPS:${fps}`)
+    }
+    requestAnimationFrame(calculateFPS);
+  }
+  requestAnimationFrame(calculateFPS)
+ </script>
+ <script>
+    // 码率  单位时间内传输或处理的比特数。
+    // 在音频和视频编码中, 码率决定了压缩的文件质量。
+    // 较高的码率通常意味着更好的音视频质量。
+    // webrtc 中 h265编码比 或h264编码 性能好，怎么测量？
+    // peerConnection.getStats()
+
+
+    // 同样画质 例如 1080p  HEVC/1080p (5.02GB)   H.264/1080p (11.5GB)
+    // VNC 登录远端 机器 设置 同一档位 或 SDK设置同一档位 查看视频大小。
+    // 前端通过工具比对 h264/h265 相同画面画质, h265 比 h264会更清晰。
+ </script>
+</body>
+</html>

@@ -255,3 +255,8 @@ export default withRouter(HomeButton);
 
 
 # [[React] ref 是如何拿到函数组件的实例](https://github.com/pro-collection/interview-question/issues/304)
+
+
+* 作为组件渲染  vs 做为 props.children渲染
+  - props.children 避免渲染 父组件变化 而重新渲染
+  
