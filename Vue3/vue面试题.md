@@ -72,3 +72,6 @@ const emit = defineEmits(['update:modelValue'])
     - 一个单文件组件可以通过它的文件名被其他自己引用。 例如 名为 FooBar.vue 的组件可以在其模版中用 <FooBar/> 引用它自己。
     - 请注意这种方式相比于导入的组件优先级更低。如果有具名的导入和组件自身推导的名字冲突了，可以为导入的组件添加别名：
     - import { FooBar as FooBarChild } from './components'如果有具名的导入和组件
+
+* vuedomdiff 时间复杂度
+  - https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/151
