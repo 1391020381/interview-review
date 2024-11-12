@@ -1,7 +1,4 @@
 # 手写 Mini React思路
-
-
-
 * 通过记录 parent、slibling 信息，让树变成链表，可以打断。每次处理一个 fiber 节点，处理每个 fiber 节点前判断是否到了固定的时间间隔，也就是时间分片，通过时间分片把处理 fiber 的过程放到多个任务里跑，这样页面内容多了也不会导致卡顿。
 
 * 这个时间片的判断就是通过当前时间和任务开始时间点的差值。
@@ -20,3 +17,5 @@
 * useEffect的 effect函数会在 before mutation 前异步调度执行 而 useLayoutEffect的 effect函数是在 layout阶段同步执行。
 
 * ref 在 mutation 阶段更新了dom,所以在layout阶段就可以拿到ref了。
+
+
