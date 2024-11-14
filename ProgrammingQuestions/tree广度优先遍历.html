@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tree</title>
+</head>
+<body>
+    <script>
+class TreeNode {
+  constructor(value) {
+    this.value = value;
+    this.left = null;
+    this.right = null;
+  }
+}
+
+function depthFirstTraversal(node) {
+  if (node === null) {
+    return;
+  }
+
+  console.log(node.value); 
+  depthFirstTraversal(node.left);
+  depthFirstTraversal(node.right);
+}
+
+// 创建一个简单的二叉树示例
+let root = new TreeNode(1);
+root.left = new TreeNode(2);
+root.right = new TreeNode(3);
+root.left.left = new TreeNode(4);
+root.left.right = new TreeNode(5);
+
+// 进行深度优先遍历
+depthFirstTraversal(root);
+    </script>
+</body>
+</html>

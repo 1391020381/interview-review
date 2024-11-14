@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tree</title>
+</head>
+<body>
+    <script>
+class TreeNode {
+  constructor(value) {
+    this.value = value;
+    this.left = null;
+    this.right = null;
+  }
+}
+function breadthFirstTraversal(root) {
+  if (root === null) {
+    return;
+  }
+
+  const queue = [root];
+
+  while (queue.length > 0) {
+    const current = queue.shift();
+    console.log(current.value);
+
+    if (current.left) {
+      queue.push(current.left);
+    }
+
+    if (current.right) {
+      queue.push(current.right);
+    }
+  }
+}
+
+// 创建一个简单的二叉树示例
+let root = new TreeNode(1);
+root.left = new TreeNode(2);
+root.right = new TreeNode(3);
+// root.left.left = new TreeNode(4);
+// root.left.right = new TreeNode(5);
+
+// // 进行广度优先遍历
+// breadthFirstTraversal(root);
+    </script>
+</body>
+</html>
