@@ -1,4 +1,4 @@
-* [Webpack - 手把手教你写一个 loader / plugin](https://juejin.cn/post/6976052326947618853)
+* [Webpack-手把手教你写一个loader/plugin](https://juejin.cn/post/6976052326947618853)
 
 * 一个loader 就是一个 nodejs模块。
     - 他导出的一个函数,这个函数只有一个入参,这个参数就是一个包含资源文件内容的字符串
@@ -82,3 +82,29 @@ export default copyrightPlugin;
 
 
 ```
+
+* plugin 
+* 使用阶段式的构建回调,webpack给我们提供了非常多hooks用来在构建的阶段让开发者自由的去引入自己的行为。
+
+
+
+* plugin  
+  - js类   
+  - apply方法  apply方法在webpack装载插件的时候被调用,并且会传入 compiler对象。
+  - 使用不同的的hooks 来指定自己需要发生的处理行为。
+  - 在异步调用时最后需要调用 webpack提供给我们的callback 或者通过 Promise的方式
+
+
+  ```
+class HelloPlugin{
+  apply(compiler){
+    compiler.hooks.<hookName>.tap(PluginName,(params)=>{
+      /** do some thing */
+    })
+  }
+}
+module.exports = HelloPlugin
+
+
+
+  ```
