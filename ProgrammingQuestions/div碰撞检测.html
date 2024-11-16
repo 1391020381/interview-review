@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="div1" style="width: 100px; height: 100px; background-color: red; position: absolute; top: 50px; left: 50px;">
+  </div>
+  <div id="div2" style="width: 100px; height: 100px; background-color: blue; position: absolute; top: 150px; left: 150px;">
+  </div>
+
+  <script>
+    function checkCollision(div1, div2) {
+      const rect1 = div1.getBoundingClientRect();
+      const rect2 = div2.getBoundingClientRect();
+
+      // 检查是否在水平方向和垂直方向都有重叠
+      if (rect1.right >= rect2.left && rect1.left <= rect2.right && rect1.bottom >= rect2.top && rect1.top <= rect2.bottom) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+
+    const div1 = document.getElementById('div1');
+    const div2 = document.getElementById('div2');
+
+    console.log(checkCollision(div1, div2));
+  </script>
+</body>
+
+</html>
