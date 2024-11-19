@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>浏览器ajax</title>
+</head>
+<body>
+    <script>
+        var xhr = new XMLHttpRequest();
+
+        xhr.open('GET',"https://example.com/data.txt",true) // true 异步
+
+        xhr.setRequestHeader("Content-Type","application/json");
+
+        xhr.onreadystatechange = function(){
+            // readyState 4 已完成
+            // status 是服务器返回的状态码 (如 200表示成功)
+            if(xhr.readyState === 4 && xhr.status === 200){
+                var response = xhr.responseText;
+                console.log(response)
+            }
+        }
+
+        xhr.send();
+
+
+        // post
+        xhr.open('POST',"https://example.com/data",true)
+        var data = JSON.stringify({key1:1,key2:2})
+        xhr.send(data)
+    </script>
+
+    <script>
+        fetch("https://example.com/api/data")
+        .then(response=>{
+
+        })
+
+        fetch("https://example.com/api/submit",{
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json"
+            },
+            body:JSON.stringify({key:1})
+        }).then(response=>{
+            
+        })
+    </script>
+</body>
+</html>

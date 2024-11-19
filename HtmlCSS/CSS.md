@@ -94,6 +94,50 @@
 </style>
 
 ```
+# BFC
+* BFC 即 块级格式上下文,它是页面中的一块渲染区域,并且有一套属于自己的渲染规则。
+    - 页面上一个隔离的独立容器,容器里面的子元素不会影响到外面的元素。
+    - BFC的区域不会与float的元素区域重叠。
+
+    - 触发条件    float   overflow hidder auto scroll   postition absolute fixed
+
+# CSS 居中对齐的多种方式
+    - 文本对齐   text-align:center;
+    - 使用边距    当中心元素是块元素  margin:0 auto;
+    - flex  一个或多个元素居中 
+
+```
+ display:flex;
+ justify-content:center;
+ align-items:center;
+
+
+.center {
+    position:absolte;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    // 固定宽高   margin:-50px -100px;
+}
+
+.parent {
+    display:grid;
+}
+.center{
+    margin:auto;
+}
+
+// 表格
+
+.parent {
+    display:table-cell;
+    vertical-align:middle;
+}
+.center {
+    margin:auto;
+}
+
+```
 
 # css透明度
 
